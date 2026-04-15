@@ -1,0 +1,17 @@
+<h2>Connexion</h2>
+
+<div class="form">
+
+  <input placeholder="Username"
+         (input)="username.set($event.target.value)">
+
+  <input type="password"
+         placeholder="Password"
+         (input)="password.set($event.target.value)">
+
+  <button mat-raised-button color="primary"
+          (click)="onLogin()">
+    Se connecter
+  </button>
+
+</div>

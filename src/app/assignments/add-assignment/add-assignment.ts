@@ -12,10 +12,13 @@ import { Router } from '@angular/router';
 import { Assignment } from '../assignment.model';
 import { AssignmentsService } from '../../shared/assignments.service';
 
+// new import pour le select de la matière
+import { MatSelectModule } from '@angular/material/select';
+
 @Component({
   selector: 'app-add-assignment',
   imports: [MatDatepickerModule, MatInputModule, MatFormFieldModule,
-     MatButtonModule, FormsModule],
+     MatButtonModule, FormsModule, MatSelectModule],
   templateUrl: './add-assignment.html',
   styleUrl: './add-assignment.css',
   providers: [provideNativeDateAdapter()],
@@ -26,6 +29,11 @@ export class AddAssignment {
   // Je veux une date de rendu "vide" par défaut
   dateDeRendu = signal(new Date());
 
+  auteur = signal("");
+  matiere = signal("");
+  note = signal<number | undefined>(undefined);
+  remarques = signal("");
+ 
   // on utilise output pour transmettre le nouvel assignment créé vers 
   // le composant parent. "assignmentAjoute" correspond à 
   // (assignmentAjoute)="ajoutAssignment($event)" dans le template du 
@@ -51,7 +59,17 @@ export class AddAssignment {
       newAssignment.nom = this.nomDevoir();
       newAssignment.dateDeRendu = this.dateDeRendu();
       newAssignment.rendu = false; 
-   
+
+      //  NOUVEAUX CHAMPS
+      newAssignment.auteur = this.auteur();
+      newAssignment.matiere = this.matiere();
+      newAssignment.note = this.note();
+      newAssignment.remarques = this.remarques();
+
+      if (!newAssignment.note) {
+        alert("Veuillez entrer une note !");
+        return;}
+        
       // On utilise le service pour ajouter le devoir à la liste des devoirs
       this.assignementService.addAssignment(newAssignment)
       .subscribe(result => {

@@ -30,9 +30,60 @@
         >
    </mat-form-field>
 
+    <!-- AUTEUR -->
+    <mat-form-field>
+    <mat-label>Auteur</mat-label>
+    <input matInput
+            name="auteur"
+            placeholder="Nom de l'étudiant"
+            [ngModel]="auteur()"
+            (ngModelChange)="auteur.set($event)">
+    </mat-form-field>
+
+    <!-- MATIERE -->
+    <mat-form-field>
+    <mat-label>Matière</mat-label>
+    <mat-select
+        name="matiere"
+        placeholder="Matière du devoir"
+        [ngModel]="matiere()"
+        (ngModelChange)="matiere.set($event)">
+        <mat-option value="Angular">Angular</mat-option>
+        <mat-option value="AWS Cloud">AWS Cloud</mat-option>
+        <mat-option value="Economie">Economie</mat-option>
+        <mat-option value="Hadoop">Hadoop</mat-option>
+        <mat-option value="Machine Learning">Machine Learning</mat-option>
+        <mat-option value="SpringBoot">SpringBoot</mat-option>
+        
+  
+    </mat-select>
+    </mat-form-field>
+
+    <!-- NOTE -->
+    <mat-form-field>
+    <mat-label>Note /20</mat-label>
+    <input matInput type="number"
+            name="note"
+            [ngModel]="note()"
+            (ngModelChange)="note.set($event)">
+    </mat-form-field>
+
+    <!-- REMARQUES -->
+    <mat-form-field>
+    <mat-label>Remarques</mat-label>
+    <textarea matInput
+                name="remarques"
+                [ngModel]="remarques()"
+                (ngModelChange)="remarques.set($event)">
+    </textarea>
+    </mat-form-field>   
+
+   
+
     <button mat-stroked-button 
             color="primary"
-            [disabled]="!dateDeRendu() || !nomDevoir()"
+            
+            [disabled]="!dateDeRendu() || !nomDevoir() || !auteur() || !matiere() || !note()"
     >
         Ajouter un Assignment
     </button>

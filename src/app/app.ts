@@ -11,6 +11,8 @@ import { Assignments } from './assignments/assignments';
 import { AuthService } from './shared/auth.service';
 import { AssignmentsService } from './shared/assignments.service';
 
+
+
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, MatButtonModule, MatIconModule, 
@@ -22,20 +24,32 @@ import { AssignmentsService } from './shared/assignments.service';
 export class App {
   titre = "Application de gestion des assignments !!!";
 
-  constructor(private authService: AuthService,
+  constructor(public authService: AuthService,
               private assignmentsService: AssignmentsService,
               private router: Router) {}
 
   login() {
     // loggue / deloggue l'utilisateur
     if(this.authService.isLoggedIn()) {
-      this.authService.logOut();
+      this.authService.logout();
       // et on revient à la page d'accueil après le logout
       //this.router.navigate(['/home']);
     } else {
-      this.authService.logIn();
+      this.authService.isLoggedIn();
     }
   }
+
+  goToLogin() {
+   this.router.navigate(['/login']);
+  }
+
+  toggleLogin() {
+  if (!this.authService.isLoggedIn()) {
+    this.router.navigate(['/login']);
+  } else {
+    this.authService.logout();
+  }
+}
 
   genererDonneesDeTest() {
     //this.assignmentsService.peuplerBD();

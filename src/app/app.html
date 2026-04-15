@@ -15,7 +15,12 @@
     <mat-icon>share</mat-icon>
   </button>
 
-      <mat-slide-toggle (click)="login()">Login</mat-slide-toggle>
+    <mat-slide-toggle 
+      [checked]="authService.isLoggedIn()"
+      (change)="toggleLogin()">
+      Login
+    </mat-slide-toggle>
+      
 
 </mat-toolbar>
 

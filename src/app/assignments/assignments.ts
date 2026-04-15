@@ -16,6 +16,7 @@ import { Assignment } from './assignment.model';
 import { AssignmentDetail } from './assignment-detail/assignment-detail';
 import { AddAssignment } from './add-assignment/add-assignment';
 import { AssignmentsService } from '../shared/assignments.service';
+import { AuthService } from '../shared/auth.service';
 @Component({
   selector: 'app-assignments',
   imports: [
@@ -52,14 +53,22 @@ export class Assignments implements OnInit {
   nextPage: number = 1;
 
   // Pour la data table
-  displayedColumns: string[] = ['assignment-nom', 'assignment-dateDeRendu', 'assignment-rendu'];
-
+displayedColumns = [
+  'assignment-nom',
+  'assignment-auteur',
+  'assignment-matiere',
+  'assignment-note',
+  'assignment-dateDeRendu',
+  'assignment-rendu',
+  'assignment-actions'
+];
 
   // un tableau avec une liste de devoirs (assignments en anglais)
   assignments = signal<Assignment[]>([]);
 
   constructor(private assignmentsService: AssignmentsService,
-              private router: Router) {}
+              private router: Router,
+              public auth: AuthService) {}
 
   // appelée à l'initialisation du composant
   // avant de faire l'affichage
@@ -166,5 +175,20 @@ export class Assignments implements OnInit {
   onRowClick(row: any) {
     console.log("Row clicked : ", row);
     this.router.navigate(['/assignments', row._id]);
+  }
+
+  onEdit(assignment: Assignment) {
+    this.router.navigate(['/edit', assignment._id]);
+  }
+
+  onDelete(assignment: Assignment) {
+    if (confirm("Tu es sûr de vouloir supprimer ?")) {
+      this.assignmentsService.deleteAssignment(assignment)
+        .subscribe(() => {
+          console.log("Supprimé !");
+          // recharger la liste
+          this.getAssignments();
+        });
+    }
   }
 }
