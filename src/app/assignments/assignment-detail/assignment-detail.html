@@ -9,8 +9,23 @@
         </mat-card-header>
 
         <mat-card-content>
-            <p>Nom : {{assignment.nom}}</p>
-            <p>Date de rendu : {{assignment.dateDeRendu | date:'dd/MM/yyyy'}}</p>
+            
+            <h2>{{assignment.nomDevoir}}</h2>
+
+            <h3>{{assignment.nom}}</h3>
+
+            <!-- <img [src]="this.auteur.set("https://randomuser.me/api/portraits/men/1.jpg");" width="100" > -->
+
+
+            <p><strong>Matière :</strong> {{assignment.matiere}}</p>
+            <p><strong>Prof :</strong> {{assignment.professeur}}</p>
+
+           <!--   <img [src]="this.imageMatiere.set("https://picsum.photos/200");" width="200"> -->
+
+            <p><strong>Note :</strong> {{assignment.note}} /20</p>
+
+            <p><strong>Remarques :</strong></p>
+            <p>{{assignment.remarques}}</p>
         </mat-card-content>
 
         <mat-card-actions id="bottom">

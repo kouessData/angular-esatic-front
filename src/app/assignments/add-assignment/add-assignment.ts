@@ -14,15 +14,22 @@ import { AssignmentsService } from '../../shared/assignments.service';
 
 // new import pour le select de la matière
 import { MatSelectModule } from '@angular/material/select';
+//utilisation de material stepper pour faire un formulaire en plusieurs étapes
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-add-assignment',
+  standalone: true,
   imports: [MatDatepickerModule, MatInputModule, MatFormFieldModule,
-     MatButtonModule, FormsModule, MatSelectModule],
+     MatButtonModule, FormsModule, MatSelectModule, MatStepperModule, MatIconModule],
   templateUrl: './add-assignment.html',
   styleUrl: './add-assignment.css',
   providers: [provideNativeDateAdapter()],
 })
+
+
+
 export class AddAssignment {
   // Pour les champs du formulaire d'ajout d'un devoir
   nomDevoir = signal('');
@@ -33,20 +40,41 @@ export class AddAssignment {
   matiere = signal("");
   note = signal<number | undefined>(undefined);
   remarques = signal("");
+  nom = signal("");
+  professeur = signal("");
+  imageMatiere = signal("");
+
  
-  // on utilise output pour transmettre le nouvel assignment créé vers 
-  // le composant parent. "assignmentAjoute" correspond à 
-  // (assignmentAjoute)="ajoutAssignment($event)" dans le template du 
-  // composant parent. assignementAjoute est un evenement custom
-  // que je crée pour transmettre le nouvel assignment créé vers le
-  // composant parent. On utilisera la méthode emit() pour émettre cet événement avec le nouvel assignment à transmettre
-  // voir la méthode onSubmit() ci-dessous pour l'utilisation de emit()
+ 
   assignmentAjoute = output<Assignment>();
+
+
+onMatiereChange(matiere: string) {
+  this.matiere.set(matiere);
+
+  if (matiere === 'Web') {
+    this.professeur.set('M. Kouadio');
+    this.imageMatiere.set('assets/web.jpg');
+  }
+
+  if (matiere === 'BD') {
+    this.professeur.set('Mme Konan');
+    this.imageMatiere.set('assets/bd.jpg');
+  }
+
+  if (matiere === 'IA') {
+    this.professeur.set('M. Yao');
+    this.imageMatiere.set('assets/ia.jpg');
+  }
+}
+
+
 
   constructor(private assignementService: AssignmentsService,
               private router: Router) {}
+  
 
-  onSubmit(event:any) {
+  onSubmit() {
       console.log("Form submitted !!!");
       // on ajoute () à la fin de this.nomDevoir pour récupérer la valeur 
       // actuelle du signal !
@@ -56,17 +84,23 @@ export class AddAssignment {
       // on peut faire l'ajout :
       // on crée un nouvel objet de type Assignment
       const newAssignment= new Assignment();
-      newAssignment.nom = this.nomDevoir();
+      newAssignment.nomDevoir = this.nomDevoir();
       newAssignment.dateDeRendu = this.dateDeRendu();
       newAssignment.rendu = false; 
+ 
 
       //  NOUVEAUX CHAMPS
       newAssignment.auteur = this.auteur();
       newAssignment.matiere = this.matiere();
       newAssignment.note = this.note();
       newAssignment.remarques = this.remarques();
+      newAssignment.nom = this.nom();
 
-      if (!newAssignment.note) {
+      
+      newAssignment.professeur = this.professeur();
+      newAssignment.imageMatiere = this.imageMatiere();
+
+      if (newAssignment.note === undefined) {
         alert("Veuillez entrer une note !");
         return;}
         

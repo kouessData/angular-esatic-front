@@ -11,13 +11,14 @@ import { Assignments } from './assignments/assignments';
 import { AuthService } from './shared/auth.service';
 import { AssignmentsService } from './shared/assignments.service';
 
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, MatButtonModule, MatIconModule, 
     MatDividerModule, Assignments, RouterLink, MatSlideToggleModule,
-    MatToolbarModule, MatSidenavModule],
+    MatToolbarModule, MatDialogModule, MatSidenavModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

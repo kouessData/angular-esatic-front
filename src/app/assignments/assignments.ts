@@ -17,6 +17,10 @@ import { AssignmentDetail } from './assignment-detail/assignment-detail';
 import { AddAssignment } from './add-assignment/add-assignment';
 import { AssignmentsService } from '../shared/assignments.service';
 import { AuthService } from '../shared/auth.service';
+
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialog } from '../confirm-dialog/confirm-dialog';
+
 @Component({
   selector: 'app-assignments',
   imports: [
@@ -60,6 +64,9 @@ displayedColumns = [
   'assignment-note',
   'assignment-dateDeRendu',
   'assignment-rendu',
+  'assignment-nom',
+  'assignment-nomDevoir',
+  'assignment-professeur',
   'assignment-actions'
 ];
 
@@ -68,6 +75,7 @@ displayedColumns = [
 
   constructor(private assignmentsService: AssignmentsService,
               private router: Router,
+              private dialog: MatDialog,
               public auth: AuthService) {}
 
   // appelée à l'initialisation du composant
@@ -181,14 +189,17 @@ displayedColumns = [
     this.router.navigate(['/edit', assignment._id]);
   }
 
-  onDelete(assignment: Assignment) {
-    if (confirm("Tu es sûr de vouloir supprimer ?")) {
-      this.assignmentsService.deleteAssignment(assignment)
+  onDelete(assignment: any) {
+    const dialogRef = this.dialog.open(ConfirmDialog);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.assignmentsService.deleteAssignment(assignment)
         .subscribe(() => {
           console.log("Supprimé !");
           // recharger la liste
           this.getAssignments();
         });
-    }
+      }
+    });
   }
 }
