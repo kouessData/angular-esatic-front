@@ -52,7 +52,7 @@ export class AddAssignment {
 onMatiereChange(matiere: string) {
   this.matiere.set(matiere);
 
-  if (matiere === 'Web') {
+  if (matiere === 'AWS Cloud') {
     this.professeur.set('M. Kouadio');
     this.imageMatiere.set('assets/web.jpg');
   }

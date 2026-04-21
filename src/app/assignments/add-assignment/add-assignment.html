@@ -6,18 +6,22 @@
       class="form"
 >
     <!-- STEP 1 ETUDIANT-->
-    <mat-horizontal-stepper> 
+    <mat-horizontal-stepper linear="false"> 
     
         <mat-step label="Étudiant">
             <mat-form-field>
                 <mat-label>Nom étudiant</mat-label>
                 <input matInput
+                name="nom"
+                [ngModel]="nom()"
+                (ngModelChange)="nom.set($event)"               
                 (input)="nom.set($event.target.value)">
         </mat-form-field>
             
             <mat-form-field>
                 <mat-label>Photo étudiant (URL)</mat-label>
                 <input matInput
+                name="auteur"
                 [ngModel]="auteur()"
                 (ngModelChange)="auteur.set($event)">
             </mat-form-field>
@@ -59,6 +63,7 @@
             <mat-form-field>
                 <mat-label>Intitulé du Devoir</mat-label>
                 <input matInput
+                name="nomDevoir"
                 [ngModel]="nomDevoir()"
                 (ngModelChange)="nomDevoir.set($event)">
             </mat-form-field>        
@@ -66,6 +71,7 @@
             <mat-form-field>
                 <mat-label>Note /20</mat-label>
                 <input matInput type="number"
+                name="note"
                 [ngModel]="note()"
                 (ngModelChange)="note.set($event)">
             </mat-form-field>
@@ -73,27 +79,20 @@
             <mat-form-field>
                 <mat-label>Remarques</mat-label>
                 <textarea matInput
+                name="remarques"
                 [ngModel]="remarques()"
                 (ngModelChange)="remarques.set($event)">
                 </textarea>
             </mat-form-field>
 
             <button mat-raised-button color="primary"
+            [disabled]="!dateDeRendu() || !nomDevoir() || !nom() || !matiere() || note() === undefined"
+
                     (click)="onSubmit()">
                 Valider
             </button>
         </mat-step>
 
 
-
-   
-
-        <button mat-stroked-button 
-                color="primary"
-                
-                [disabled]="!dateDeRendu() || !nomDevoir() || !nom() || !matiere() || note() === undefined"
-        >
-            Ajouter un Assignment
-        </button>
     </mat-horizontal-stepper>
 </form>
