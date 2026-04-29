@@ -33,17 +33,16 @@ export class AssignmentsService {
 
   // Version avec pagination : on envoie la page et le nombre d'éléments 
   // par page au backend, et le backend nous retourne les données de la 
-  // page demandée.
-  // L'URI est presque le même que pour getAssignments(), mais on ajoute 
-  // des paramètres de requête (page et limit) pour indiquer au backend 
-  // quelle page on veut. Le backend doit être configuré pour lire ces 
+  // page demandée. 
   // paramètres de requête et retourner les données correspondantes.
-  getAssignmentsPagine(page: number, limit: number): Observable<any> {
-    return this.http.get<Assignment[]>(this.URI_BACKEND + '?page=' + page + '&limit=' + limit);
+  getAssignmentsPagine(page: number, limit: number, search: string = '') {
+    return this.http.get<any>(
+      `${this.URI_BACKEND}?page=${page}&limit=${limit}&search=${search}`
+    );
   }
 
   // Récupérer un assignment par son id
-  getAssignment(id: number): Observable<Assignment | undefined> {
+  getAssignment(id: string): Observable<Assignment | undefined> {
     //const assignment = this.assignments.find(a => a.id === id);
     //return of(assignment);
     return this.http.get<Assignment>(this.URI_BACKEND + '/' + id);
@@ -58,15 +57,15 @@ export class AssignmentsService {
   }
 
   updateAssignment(assignment: Assignment): Observable<any> {
-    // dans une vraie application, on ferait un appel HTTP PUT
-    // vers le backend pour mettre à jour l'assignment,
-    // et on gérerait la réponse du backend pour savoir si la mise à jour
-    // a réussi ou pas. Ici, pour simplifier, on va juste retourner
-    // un Observable avec un message de succès.
-
-    this.loggingService.log(assignment.nom, 'mis à jour');
-
-    return this.http.put<any>(this.URI_BACKEND, assignment);
+    return this.http.put(
+      this.URI_BACKEND,
+      assignment,
+      {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token')
+        }
+      }
+    );
   }
 
   deleteAssignment(assignment: Assignment): Observable<any> {
@@ -83,14 +82,20 @@ export class AssignmentsService {
     return this.http.delete<any>(this.URI_BACKEND + '/' + assignment._id);
   }
 
-  // Méthode qui va peupler la base de données avec les données
-  // initiales du fichier data.ts
+  getHeaders() {
+    return {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token')
+      }
+    };
 
-  /* VERSION NAIVE QUI NE GERE PAS L'ASYNCHRONISITE DE L'APPEL HTTP POST 
-    DANS LA METHODE addAssignment, donc on ne peut pas savoir quand
-    elle a termniné, et du coup on risque d'avoir des problèmes si on veut 
-    faire des choses après l'appel à addAssignment, comme afficher un message 
-    de succès, re-afficher la liste des assignments, etc. */
+  
+    
+  }
+  getMatieres() {
+    return this.http.get<any[]>('http://localhost:8010/api/matieres');
+  }
+  
   peuplerBD() {
     bdInitialAssignments.forEach((a) => {
       const assignment = new Assignment();

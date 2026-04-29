@@ -9,10 +9,13 @@ import { authGuard } from './shared/auth-guard';
 import { Login } from './login/login';
 
 export const routes: Routes = [
-    { path: '', redirectTo: '/home', pathMatch: 'full' },
-    { path: 'home', component: Assignments},
-    { path: 'add', component: AddAssignment},
-    { path: 'assignments/:id', component: AssignmentDetail}, 
+    
+    { path: '', redirectTo: '/login', pathMatch: 'full' },
+    { path: 'home', component: Assignments, canActivate: [authGuard] },
+
+    { path: 'add', component: AddAssignment, canActivate: [authGuard]},
+    { path: 'assignments/:id', component: AssignmentDetail, canActivate: [authGuard]},
+    
     { path: 'login', component: Login },
     {
       path: 'assignments/:id/edit', 

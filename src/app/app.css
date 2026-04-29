@@ -1,51 +1,18 @@
-section {
-  display: flex;
-  align-items: center;
+mat-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
-.example-label {
-  font-size: 14px;
-  margin: 0 16px 0 8px;
-  min-width: 120px;
+.logo {
+  font-weight: bold;
+  font-size: 18px;
 }
 
-.example-button-row {
-  max-width: 600px;
+.spacer {
+  flex: 1;
 }
 
-.example-button-row .mat-mdc-button-base {
-  margin: 8px 8px 8px 0;
-}
-
-.example-flex-container {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-.example-spacer {
-  flex: 1 1 auto;
-}
-
-.app-sidenav {
-  width: 15%;
-  border:1px solid black;
-  border-radius: 10px;
-  padding: 10px;
-}
-
-.app-sidenav-content {
-    border:1px solid black;
-    padding: 10px;
-    border-radius: 10px;
-    margin-left: 10px;
-    margin-right:20px;
-
-}
-
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
+.content {
+  padding: 20px;
 }

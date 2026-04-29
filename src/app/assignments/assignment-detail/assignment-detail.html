@@ -1,58 +1,60 @@
-<!-- on affiche la valeur du signal assignmentTransmis -->
-<!-- ASTUCE : avec le as on peut garder une écriture compacte
-  pour accèder aux propriétés de l'objet reçu en tant que signal -->
 @if(assignmentAffiche(); as assignment) {
-    <mat-card appearance="outlined">
-        <mat-card-header>
-           <mat-card-title>Détails de l'assignment</mat-card-title>
-           <mat-card-subtitle>On pourra ajouter image etc.</mat-card-subtitle>
-        </mat-card-header>
+  <mat-card class="detail-container">
 
-        <mat-card-content>
-            
-            <h2>{{assignment.nomDevoir}}</h2>
+    <mat-card-header>
+      <mat-card-title>{{assignment.nomDevoir}}</mat-card-title>
+      <mat-card-subtitle>{{assignment.nom}}</mat-card-subtitle>
+    </mat-card-header>
 
-            <h3>{{assignment.nom}}</h3>
+    <mat-card-content>
 
-            <!-- <img [src]="this.auteur.set("https://randomuser.me/api/portraits/men/1.jpg");" width="100" > -->
+      <!-- PHOTO ETUDIANT -->
+      <img *ngIf="assignment.auteur"
+           [src]="assignment.auteur"
+           class="photo-etudiant">
+           
+      <p><strong>Matière :</strong> {{assignment.matiere}}</p>
 
+      <!-- IMAGE MATIERE -->
+      <img *ngIf="assignment.imageMatiere"
+           [src]="assignment.imageMatiere"
+           class="image-matiere">
 
-            <p><strong>Matière :</strong> {{assignment.matiere}}</p>
-            <p><strong>Prof :</strong> {{assignment.professeur}}</p>
+      
+      <p><strong>Professeur :</strong> {{assignment.professeur}}</p>
+      <p><strong>Date :</strong> {{assignment.dateDeRendu | date}}</p>
+      <p><strong>Note :</strong> {{assignment.note}} /20</p>
+      <p><strong>Remarques :</strong> {{assignment.remarques}}</p>
 
-           <!--   <img [src]="this.imageMatiere.set("https://picsum.photos/200");" width="200"> -->
+    </mat-card-content>
 
-            <p><strong>Note :</strong> {{assignment.note}} /20</p>
+    <mat-card-actions id="bottom">
 
-            <p><strong>Remarques :</strong></p>
-            <p>{{assignment.remarques}}</p>
-        </mat-card-content>
+      <mat-checkbox 
+        [checked]="assignment.rendu"
+        (change)="onAssignmentRendu()">
+        Rendu
+      </mat-checkbox>
 
-        <mat-card-actions id="bottom">
-            <mat-checkbox 
-                [checked]="assignment.rendu"
-                (click)="onAssignmentRendu()"
-            >
-                Rendu
-            </mat-checkbox>
+      <button mat-raised-button color="primary"
+              (click)="onAssignmentRendu()">
+        Valider
+      </button>
 
-            <a routerLink="edit">
-                <button 
-                    mat-stroked-button 
-                    color="primary"
-                    [disabled]="!isAdmin()"
-                >
-                    EDIT
-                </button>
-            </a>
+      <button mat-stroked-button color="primary"
+      *ngIf="assignment._id && isAdmin()"
+      (click)="onEditAssignment(assignment._id!)"
+       >
+       EDIT
+      </button>
 
-            <button 
-                mat-stroked-button 
-                color="warn"
-                (click)="onDeleteAssignment()"
-            >
-                DELETE
-            </button>
-        </mat-card-actions>
-    </mat-card>
+      <button mat-stroked-button color="warn"
+              (click)="onDeleteAssignment()"
+              *ngIf="isAdmin()">
+        DELETE
+      </button>
+
+    </mat-card-actions>
+
+  </mat-card>
 }

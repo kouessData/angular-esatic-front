@@ -1,98 +1,105 @@
-<h3>Ajout d'un Assignment (composant fils)</h3>
+<div class="container">
 
-<form ngForm 
-      #assignmentForm
-      (submit)="onSubmit(); assignmentForm.reset()"
-      class="form"
->
-    <!-- STEP 1 ETUDIANT-->
-    <mat-horizontal-stepper linear="false"> 
+  <h2 class="title">
+    <mat-icon>add_circle</mat-icon>
+    Ajouter un Assignment
+  </h2>
+
+  <form (ngSubmit)="onSubmit()" class="form-grid">
     
-        <mat-step label="Étudiant">
-            <mat-form-field>
-                <mat-label>Nom étudiant</mat-label>
-                <input matInput
-                name="nom"
-                [ngModel]="nom()"
-                (ngModelChange)="nom.set($event)"               
-                (input)="nom.set($event.target.value)">
+
+    <!-- 🟦 ETUDIANT -->
+    <mat-card class="card">
+      <h3><mat-icon>person</mat-icon> Informations Étudiant</h3>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Nom étudiant</mat-label>
+        <input matInput [(ngModel)]="assignment.nom" name="nom">
+      </mat-form-field>
+
+      <div class="file-upload">
+        <label><mat-icon>photo_camera</mat-icon> Photo étudiant</label>
+
+        <input type="file" (change)="uploadPhotoEtudiant($event)">
+
+        <img *ngIf="assignment.auteur"
+             [src]="assignment.auteur"
+             class="preview-img">
+      </div>
+    </mat-card>
+
+
+    <!-- 🟩 DEVOIR -->
+    <mat-card class="card">
+      <h3><mat-icon>menu_book</mat-icon> Informations Devoir</h3>
+
+      <div class="grid-2">
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nom du devoir</mat-label>
+          <input matInput [(ngModel)]="assignment.nomDevoir" name="nomDevoir">
         </mat-form-field>
-            
-            <mat-form-field>
-                <mat-label>Photo étudiant (URL)</mat-label>
-                <input matInput
-                name="auteur"
-                [ngModel]="auteur()"
-                (ngModelChange)="auteur.set($event)">
-            </mat-form-field>
-            <button mat-button matStepperNext>Suivant</button>
-        </mat-step>
 
-    <!-- STEP 2 INFO PROF -->
-        <mat-step label="Matière">
+        <mat-form-field appearance="outline">
+          <mat-label>Matière</mat-label>
+          <mat-select [(ngModel)]="assignment.matiere"
+                      name="matiere"
+                      (selectionChange)="onMatiereChange()">
 
-            <mat-form-field>
-                <mat-label>Matière</mat-label>
-                <mat-select
-                (selectionChange)="onMatiereChange($event.value)">
-                <mat-option value="Angular">Angular</mat-option>
-                <mat-option value="AWS Cloud">AWS Cloud</mat-option>
-                <mat-option value="BD">Base de données</mat-option>
-                <mat-option value="Economie">Economie</mat-option>
-                <mat-option value="Hadoop">Hadoop</mat-option>
-                <mat-option value="IA">IA</mat-option>
-                <mat-option value="Machine Learning">Machine Learning</mat-option>
-                <mat-option value="SpringBoot">SpringBoot</mat-option>
-                <mat-option value="Web">Web</mat-option>
-                
+            <mat-option *ngFor="let m of matieres" [value]="m.nom">
+              {{m.nom}}
+            </mat-option>
 
-                </mat-select>
-            </mat-form-field>
+          </mat-select>
+        </mat-form-field>
 
-            <p>Professeur : {{professeur()}}</p>
+        <!-- Image matière -->
+        <div class="file-upload full">
+          <label><mat-icon>image</mat-icon> Image matière</label>
+          <input type="file" (change)="uploadImageMatiere($event)">
 
-            <img [src]="imageMatiere()" width="150">
+          <img *ngIf="assignment.imageMatiere"
+               [src]="assignment.imageMatiere"
+               class="preview-img">
+        </div>
 
-            <button mat-button matStepperPrevious>Retour</button>
-            <button mat-button matStepperNext>Suivant</button>
-        </mat-step>
+        <mat-form-field appearance="outline">
+          <mat-label>Professeur</mat-label>
+          <input matInput [value]="assignment.professeur" disabled>
+        </mat-form-field>
 
-        <!-- STEP 3 DATE DE RENDU -->
-        <mat-step label="Évaluation">
+        <mat-form-field appearance="outline">
+          <mat-label>Note</mat-label>
+          <input matInput type="number" [(ngModel)]="assignment.note" name="note">
+        </mat-form-field>
 
-            <mat-form-field>
-                <mat-label>Intitulé du Devoir</mat-label>
-                <input matInput
-                name="nomDevoir"
-                [ngModel]="nomDevoir()"
-                (ngModelChange)="nomDevoir.set($event)">
-            </mat-form-field>        
+        <mat-form-field appearance="outline">
+          <mat-label>Date de rendu</mat-label>
+          <input matInput type="date"
+                 [(ngModel)]="assignment.dateDeRendu"
+                 name="dateDeRendu">
+        </mat-form-field>
 
-            <mat-form-field>
-                <mat-label>Note /20</mat-label>
-                <input matInput type="number"
-                name="note"
-                [ngModel]="note()"
-                (ngModelChange)="note.set($event)">
-            </mat-form-field>
+        <mat-checkbox [(ngModel)]="assignment.rendu" name="rendu" class="full">
+          ✔ Devoir rendu
+        </mat-checkbox>
 
-            <mat-form-field>
-                <mat-label>Remarques</mat-label>
-                <textarea matInput
-                name="remarques"
-                [ngModel]="remarques()"
-                (ngModelChange)="remarques.set($event)">
-                </textarea>
-            </mat-form-field>
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>Remarques</mat-label>
+          <textarea matInput [(ngModel)]="assignment.remarques" name="remarques"></textarea>
+        </mat-form-field>
 
-            <button mat-raised-button color="primary"
-            [disabled]="!dateDeRendu() || !nomDevoir() || !nom() || !matiere() || note() === undefined"
+      </div>
+    </mat-card>
 
-                    (click)="onSubmit()">
-                Valider
-            </button>
-        </mat-step>
+    <!-- 🚀 BUTTON -->
+    <div class="actions">
+      <button mat-raised-button color="accent">
+        <mat-icon>save</mat-icon>
+        Enregistrer
+      </button>
+    </div>
 
+  </form>
 
-    </mat-horizontal-stepper>
-</form>
+</div>

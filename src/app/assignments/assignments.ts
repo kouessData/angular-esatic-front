@@ -1,205 +1,148 @@
 import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms'; // 🔥 IMPORTANT
 
-import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
-import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 
-import { Rendu } from '../shared/rendu';
-import { NonRendu } from '../shared/non-rendu';
-import { ImportantDirective } from '../shared/important.directive';
 import { Assignment } from './assignment.model';
-import { AssignmentDetail } from './assignment-detail/assignment-detail';
-import { AddAssignment } from './add-assignment/add-assignment';
 import { AssignmentsService } from '../shared/assignments.service';
 import { AuthService } from '../shared/auth.service';
 
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialog } from '../confirm-dialog/confirm-dialog';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-assignments',
+  standalone: true,
   imports: [
-    MatDividerModule,
-    Rendu,
-    NonRendu,
-    ImportantDirective,
-    AssignmentDetail,
-    MatListModule,
-    MatButtonModule,
     CommonModule,
-    AddAssignment,
-    RouterLink,
+    FormsModule, // 🔥 AJOUT
+    MatButtonModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSnackBarModule // 🔥 AJOUT
   ],
   templateUrl: './assignments.html',
   styleUrl: './assignments.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Assignments implements OnInit {
+
   titre = 'Liste des Assignments';
-  ajoutActive = signal(true);
 
-  // Pour la pagination
-  page: number = 1;
-  limit: number = 10;
-  totalDocs: number = 0;
-  totalPages: number = 0;
-  pagingCounter: number = 1;
-  hasPrevPage: boolean = false;
-  hasNextPage: boolean = false;
-  prevPage:number = 1;
-  nextPage: number = 1;
-
-  // Pour la data table
-displayedColumns = [
-  'assignment-nom',
-  'assignment-auteur',
-  'assignment-matiere',
-  'assignment-note',
-  'assignment-dateDeRendu',
-  'assignment-rendu',
-  'assignment-nom',
-  'assignment-nomDevoir',
-  'assignment-professeur',
-  'assignment-actions'
-];
-
-  // un tableau avec une liste de devoirs (assignments en anglais)
   assignments = signal<Assignment[]>([]);
+  assignmentsFiltres: Assignment[] = [];
 
-  constructor(private assignmentsService: AssignmentsService,
-              private router: Router,
-              private dialog: MatDialog,
-              public auth: AuthService) {}
+  matieres: any[] = [];
 
-  // appelée à l'initialisation du composant
-  // avant de faire l'affichage
+  page = 1;
+  limit = 10;
+  totalDocs = 0;
+  totalPages = 0;
+  search = '';
+
+  displayedColumns = [
+    'assignment-nom',
+    'assignment-nomDevoir',
+    'assignment-matiere',
+    'assignment-professeur',
+    'assignment-note',
+    'assignment-dateDeRendu',
+    'assignment-rendu',
+    'voir',
+    'assignment-actions'
+  ];
+
+  constructor(
+    private assignmentsService: AssignmentsService,
+    private router: Router,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    public auth: AuthService
+  ) {}
+
   ngOnInit(): void {
-    console.log('ngOnInit appelé !!!');
     this.getAssignments();
-   
-    /*
-    // appelées à l'initialisation du composant
-    // avant de faire l'affichage, on peut faire des traitements pour 
-    // préparer les données etc.
 
-    // Pour le moment, je m'en sers pour montre l'aspect "réactif" d'Angular : 
-    // après 3 secondes on va rendre le bouton enabled
-    setTimeout(() => {
-      this.ajoutActive.set(true);
-      console.log("Bouton d'ajout activé !!!");
-    }, 3000);
-
-    // et on va ajouter un devoir après 5 secondes
-    setTimeout(() => {
-      this.assignments.update(list => [
-        ...list,
-        {
-          nom: "NOUVEAU DEVOIR pour montrer la réactivité d'Angular !!!",
-          dateDeRendu: new Date("2026-04-30"),
-          rendu : false
-        }
-      ]);
-      console.log('Nouveau devoir ajouté !!!');
-    }, 5000);
-    */
-  }
-
-  getAssignments() {
-     this.assignmentsService.getAssignmentsPagine(this.page, this.limit)
-    .subscribe((data) => {
-      this.totalDocs = data.totalDocs;
-      this.totalPages = data.totalPages;
-      this.pagingCounter = data.pagingCounter;
-      this.hasPrevPage = data.hasPrevPage;
-      this.hasNextPage = data.hasNextPage;
-      this.prevPage = data.prevPage;
-      this.nextPage = data.nextPage;
-      // on ne rentre ici que lorsque les données observables renvoyées
-      // par getAssignments() sont disponibles, c'est à dire quel'appel
-      // HTTP est terminé et que les données sont arrivées.
-      // C'est pour ça que c'est mieux de faire l'appel HTTP dans un service,
-      // et pas dans le composant, pour gérer l'asynchronicité de l'appel HTTP.
-      this.assignments.set(data.docs);
+    this.assignmentsService.getMatieres().subscribe({
+      next: (data) => this.matieres = data
     });
   }
 
-  // any = en typescript, c'est un type générique qui peut représenter
-  // n'importe quel type de données. Typiquement, on l'utilise lorsque
-  // le type de données n'est pas connu à l'avance ou peut varier.
-  getColor(assignment: any) {
-    if (assignment.rendu) {
-      return 'green';
+  filtrerMatiere(matiere: string) {
+    const data = this.assignments();
+
+    if (!matiere) {
+      this.assignmentsFiltres = data;
     } else {
-      return 'red';
+      this.assignmentsFiltres = data.filter(a =>
+        a.matiere?.toLowerCase() === matiere.toLowerCase()
+      );
     }
   }
 
-  premierePage() {
+  filtrerRendu(val: string) {
+    const data = this.assignments();
+
+    if (!val) {
+      this.assignmentsFiltres = data;
+    } else {
+      this.assignmentsFiltres = data.filter(a =>
+        a.rendu.toString() === val
+      );
+    }
+  }
+
+  // 🔍 RECHERCHE
+  onSearchChange() {
     this.page = 1;
     this.getAssignments();
   }
 
-  dernierePage() {
-    this.page = this.totalPages;
+  refresh() {
+    this.page = 1;
     this.getAssignments();
+
+    this.snackBar.open("🔄 Liste actualisée", "OK", { duration: 2000 });
   }
 
-  pageSuivante() {
-    if (this.hasNextPage) {
-      this.page = this.nextPage;
-      this.getAssignments();
-    }
+  getAssignments() {
+    this.assignmentsService
+      .getAssignmentsPagine(this.page, this.limit, this.search)
+      .subscribe((data) => {
+        this.totalDocs = data.totalDocs;
+        this.totalPages = data.totalPages;
+        this.assignments.set(data.docs);
+      });
   }
 
-  pagePrecedente() {
-    if (this.hasPrevPage) {
-      this.page = this.prevPage;
-      this.getAssignments();
-    }
+  voirDetail(a: Assignment) {
+    this.router.navigate(['/assignments', a._id]);
   }
 
-  changeNbAssignmentsParPage(nb: string) {
-    this.limit = parseInt(nb);
-    this.getAssignments();
+  onEdit(a: Assignment) {
+    this.router.navigate(['/assignments', a._id, 'edit']);
   }
 
-  // Appelé par le composant Paginator de Angular Material quand on change 
-  // de page
+  onDelete(a: Assignment) {
+    const dialogRef = this.dialog.open(ConfirmDialog);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.assignmentsService.deleteAssignment(a)
+          .subscribe(() => this.getAssignments());
+      }
+    });
+  }
+
   pageChange(event: any) {
-    console.log("Page changed : ", event);
     this.limit = event.pageSize;
     this.page = event.pageIndex + 1;
     this.getAssignments();
-  }
-
-  // Pour gérer le click sur les lignes du tableau (tr)
-  onRowClick(row: any) {
-    console.log("Row clicked : ", row);
-    this.router.navigate(['/assignments', row._id]);
-  }
-
-  onEdit(assignment: Assignment) {
-    this.router.navigate(['/edit', assignment._id]);
-  }
-
-  onDelete(assignment: any) {
-    const dialogRef = this.dialog.open(ConfirmDialog);
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.assignmentsService.deleteAssignment(assignment)
-        .subscribe(() => {
-          console.log("Supprimé !");
-          // recharger la liste
-          this.getAssignments();
-        });
-      }
-    });
   }
 }

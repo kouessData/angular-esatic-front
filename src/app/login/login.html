@@ -1,17 +1,12 @@
-<h2>Connexion</h2>
+<!-- login.html corrigé -->
+<div class="login-container">
+  <div class="login-card">
+    <h2>🔐 Connexion</h2>
 
-<div class="form">
+    <input [(ngModel)]="username" placeholder="Username">
+    <input [(ngModel)]="password" type="password" placeholder="Mot de passe">
 
-  <input placeholder="Username"
-         (input)="username.set($event.target.value)">
-
-  <input type="password"
-         placeholder="Password"
-         (input)="password.set($event.target.value)">
-
-  <button mat-raised-button color="primary"
-          (click)="onLogin()">
-    Se connecter
-  </button>
-
+    <button (click)="onLogin()">Se connecter</button>
+    <!--              ↑ était login(), doit correspondre à la méthode dans login.ts -->
+  </div>
 </div>

@@ -1,6 +1,29 @@
-.form {
+.login-container {
+  height: 100vh;
   display: flex;
-  flex-direction: column;
-  gap: 15px;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #0f2027, #2c5364);
+}
+
+.login-card {
+  background: white;
+  padding: 40px;
+  border-radius: 15px;
   width: 300px;
+  text-align: center;
+}
+
+input {
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background: #1976d2;
+  color: white;
+  border: none;
 }

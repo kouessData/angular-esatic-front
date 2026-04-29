@@ -15,11 +15,11 @@ import { AuthService } from '../../shared/auth.service';
 
 @Component({
   selector: 'app-assignment-detail',
-  imports: [CommonModule, MatCardModule, MatCheckboxModule, MatButtonModule, 
-    RouterLink],
+  imports: [CommonModule, MatCardModule, MatCheckboxModule, MatButtonModule],
   templateUrl: './assignment-detail.html',
   styleUrl: './assignment-detail.css',
 })
+
 export class AssignmentDetail implements OnInit {
   private readonly assignmentFromRoute = signal<Assignment | null>(null);
 
@@ -59,8 +59,7 @@ export class AssignmentDetail implements OnInit {
   onAssignmentRendu() {
     // astuce : pour éviter les problèmes de null, 
     // on peut faire un if ou alors utiliser l'opérateur "?" 
-    // pour dire "si assignmentAffiche n'est pas null, 
-    // ou alors on fait ceci:"
+
     const assignment = this.assignmentAffiche();
 
     if(assignment) {
@@ -69,9 +68,13 @@ export class AssignmentDetail implements OnInit {
         console.log(result);
 
         // on va naviguer programmatiquement vers la page d'accueil après la mise à jour,
-        this.router.navigate(['/']);
+        this.router.navigate(['/home']);
       });
     }
+  }
+
+  onEditAssignment(id: string) {
+    this.router.navigate(['/assignments', id, 'edit']);
   }
 
   onDeleteAssignment() {
@@ -91,6 +94,8 @@ export class AssignmentDetail implements OnInit {
   }
 
   isAdmin() {
-    return this.authService.isLoggedIn;
+    return this.authService.isAdmin();
   }
+
+
 }

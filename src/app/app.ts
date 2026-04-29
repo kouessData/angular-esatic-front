@@ -12,13 +12,13 @@ import { AuthService } from './shared/auth.service';
 import { AssignmentsService } from './shared/assignments.service';
 
 import { MatDialogModule } from '@angular/material/dialog';
-
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, MatButtonModule, MatIconModule, 
     MatDividerModule, Assignments, RouterLink, MatSlideToggleModule,
-    MatToolbarModule, MatDialogModule, MatSidenavModule],
+    MatToolbarModule, MatDialogModule,CommonModule, MatSidenavModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -30,15 +30,13 @@ export class App {
               private router: Router) {}
 
   login() {
-    // loggue / deloggue l'utilisateur
-    if(this.authService.isLoggedIn()) {
-      this.authService.logout();
-      // et on revient à la page d'accueil après le logout
-      //this.router.navigate(['/home']);
-    } else {
-      this.authService.isLoggedIn();
-    }
+  if(this.authService.isLoggedIn()) {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  } else {
+    this.router.navigate(['/login']);
   }
+}
 
   goToLogin() {
    this.router.navigate(['/login']);

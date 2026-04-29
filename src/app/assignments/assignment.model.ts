@@ -16,5 +16,5 @@ export class Assignment {
   rendu!: boolean;
   remarques?: string;
 
-  dateDeRendu!: Date;
+  dateDeRendu!: Date | string;
 }

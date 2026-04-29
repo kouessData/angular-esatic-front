@@ -1,8 +1,145 @@
-.form {
-    display:flex;
-    flex-direction: column;
-    margin:5px;
-    gap: 15px;
-    width: 400px;
+body {
+  background: linear-gradient(135deg, #0f2027, #2c5364);
+  min-height: 100vh;
 }
+.container {
+  max-width: 900px; /* ↓ réduit */
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 25px;
+}
+h2 {
+  color: black;
+
+}
+.title {
+  text-align: center;
+  color: white;
+  font-size: 28px;
+  margin-bottom: 30px;
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+
+.card {
+  padding: 25px;
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  border-left: 6px solid #00bcd4; /* 🔥 couleur premium */
+}
+.card h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  color: #2c5364;
+}
+
+mat-icon {
+  color: #00bcd4;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.full {
+  grid-column: span 2;
+}
+
+.preview-img {
+  display: block;
+  margin-top: 10px;
+  width: 90px;
+  border-radius: 12px;
+}
+.actions {
+  text-align: center;
+  margin-top: 20px;
+}
+
+button {
+  padding: 12px 30px;
+  font-size: 16px;
+  border-radius: 30px;
+}
+.btn-save {
+  margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  background: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btn-save:hover {
+  background: #125ca1;
+}
+
+/* Snackbar styles */
+.success-snackbar {
+  background: #4caf50 !important;
+}
+
+.error-snackbar {
+  background: #f44336 !important;
+}
+
+
+/* Upload design */
+.upload-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #f5f7fb;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.file-input {
+  padding: 10px;
+  background: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.preview-img {
+  width: 80px;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+
+
+/* bouton */
+.btn {
+  margin-top: 20px;
+  height: 45px;
+  font-weight: bold;
+  border-radius: 10px;
+}
+
+/* checkbox centré */
+mat-checkbox {
+  display: flex;
+  align-items: center;
+}
+
 

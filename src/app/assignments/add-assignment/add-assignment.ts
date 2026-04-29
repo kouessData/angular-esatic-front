@@ -1,123 +1,130 @@
-import { Component, output, signal } from '@angular/core';
-
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatButtonModule } from '@angular/material/button';
-
-import { provideNativeDateAdapter } from '@angular/material/core';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
-import { Assignment } from '../assignment.model';
 import { AssignmentsService } from '../../shared/assignments.service';
+import { Assignment } from '../assignment.model';
 
-// new import pour le select de la matière
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-//utilisation de material stepper pour faire un formulaire en plusieurs étapes
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
+//designer
 import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+
 
 @Component({
   selector: 'app-add-assignment',
   standalone: true,
-  imports: [MatDatepickerModule, MatInputModule, MatFormFieldModule,
-     MatButtonModule, FormsModule, MatSelectModule, MatStepperModule, MatIconModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
+    MatSnackBarModule
+  ],
   templateUrl: './add-assignment.html',
-  styleUrl: './add-assignment.css',
-  providers: [provideNativeDateAdapter()],
+  styleUrl: './add-assignment.css'
 })
+export class AddAssignment implements OnInit {
 
+  assignment: Assignment = new Assignment();
+  matieres: any[] = [];
 
+  constructor(
+    private assignmentsService: AssignmentsService,
+    private router: Router,
+    private snackBar: MatSnackBar
+  ) {}
 
-export class AddAssignment {
-  // Pour les champs du formulaire d'ajout d'un devoir
-  nomDevoir = signal('');
-  // Je veux une date de rendu "vide" par défaut
-  dateDeRendu = signal(new Date());
-
-  auteur = signal("");
-  matiere = signal("");
-  note = signal<number | undefined>(undefined);
-  remarques = signal("");
-  nom = signal("");
-  professeur = signal("");
-  imageMatiere = signal("");
-
- 
- 
-  assignmentAjoute = output<Assignment>();
-
-
-onMatiereChange(matiere: string) {
-  this.matiere.set(matiere);
-
-  if (matiere === 'AWS Cloud') {
-    this.professeur.set('M. Kouadio');
-    this.imageMatiere.set('assets/web.jpg');
+  ngOnInit(): void {
+    // 🔥 récupérer les matières depuis backend
+    this.assignmentsService.getMatieres().subscribe({
+      next: (data) => this.matieres = data,
+      error: (err) => console.error("Erreur matieres", err)
+    });
   }
 
-  if (matiere === 'BD') {
-    this.professeur.set('Mme Konan');
-    this.imageMatiere.set('assets/bd.jpg');
+  onMatiereChange() {
+    const mat = this.matieres.find(m => m.nom === this.assignment.matiere);
+    this.assignment.professeur = mat?.prof || "Prof inconnu";
   }
 
-  if (matiere === 'IA') {
-    this.professeur.set('M. Yao');
-    this.imageMatiere.set('assets/ia.jpg');
+
+
+  // ajout des images
+  uploadPhotoEtudiant(event: any) {
+    const file = event.target.files[0];
+    console.log("FILE:", file);
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'angular_upload');
+
+    fetch('https://api.cloudinary.com/v1_1/djvilcwrz/image/upload', {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+      this.assignment.auteur = data.secure_url;
+      console.log("Photo étudiant OK :", data.secure_url);
+    });
   }
-}
 
+  uploadImageMatiere(event: any) {
+    const file = event.target.files[0];
 
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'angular_upload');
 
-  constructor(private assignementService: AssignmentsService,
-              private router: Router) {}
-  
+    fetch('https://api.cloudinary.com/v1_1/djvilcwrz/image/upload', {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+      this.assignment.imageMatiere = data.secure_url;
+      console.log("Image matière OK :", data.secure_url);
+    });
+  }
 
   onSubmit() {
-      console.log("Form submitted !!!");
-      // on ajoute () à la fin de this.nomDevoir pour récupérer la valeur 
-      // actuelle du signal !
-      console.log("Nom du devoir : ", this.nomDevoir());
-      console.log("Date de rendu : ", this.dateDeRendu());
-  
-      // on peut faire l'ajout :
-      // on crée un nouvel objet de type Assignment
-      const newAssignment= new Assignment();
-      newAssignment.nomDevoir = this.nomDevoir();
-      newAssignment.dateDeRendu = this.dateDeRendu();
-      newAssignment.rendu = false; 
- 
+    console.log("DATA ENVOYÉE :", this.assignment);
 
-      //  NOUVEAUX CHAMPS
-      newAssignment.auteur = this.auteur();
-      newAssignment.matiere = this.matiere();
-      newAssignment.note = this.note();
-      newAssignment.remarques = this.remarques();
-      newAssignment.nom = this.nom();
+    this.assignmentsService.addAssignment(this.assignment).subscribe({
+      next: (res) => {
 
-      
-      newAssignment.professeur = this.professeur();
-      newAssignment.imageMatiere = this.imageMatiere();
+        // ✅ message succès PRO
+        this.snackBar.open("✅ Assignment ajouté avec succès", "OK", {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
 
-      if (newAssignment.note === undefined) {
-        alert("Veuillez entrer une note !");
-        return;}
-        
-      // On utilise le service pour ajouter le devoir à la liste des devoirs
-      this.assignementService.addAssignment(newAssignment)
-      .subscribe(result => {
-        console.log(result);
+        // 🔥 redirection vers  detail 
+        ;
+        this.router.navigate(['/assignments', res._id]);
+      },
 
-        // On prévient le père pour ajouter le devoir à la liste des devoirs affichés
-        //this.assignmentAjoute.emit(newAssignment); // on émet le nouvel assignment
-      
-        // ici on va devoir faire une navigation "par programme" 
-        // vers la page d'accueil (la liste des devoirs), 
-        // pour revenir à la liste après l'ajout du devoir.
-        this.router.navigate(['/']);
-      });
-  
-    }
-  
+      error: (err) => {
+        console.error(err);
+
+        this.snackBar.open("❌ Erreur lors de l'ajout", "Fermer", {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+      }
+    });
+  }
 }

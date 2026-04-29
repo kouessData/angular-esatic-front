@@ -1,41 +1,62 @@
-@if(assignementAffiche(); as assignment) {
-    <div class="container">
-    <h1>Edition de l'assignment {{assignment.nom}}</h1>
+<div class="form-container">
 
-    <form ngForm class="form" 
-          #formupdate 
-          (submit)="onSaveAssignment(); formupdate.reset();"
-    >
+  <h2>Modifier Assignment</h2>
 
-        <mat-form-field>
-            <input matInput 
-                name="assignment-name"
-                [ngModel]="nomDevoir()" 
-                (ngModelChange)="nomDevoir.set($event)"
-            >
-        </mat-form-field>
+  <!-- Nom étudiant -->
+  <div class="form-group">
+    <label>👨‍🎓 Étudiant</label>
+    <input [(ngModel)]="assignment.nom" />
+  </div>
 
-        <mat-form-field>
-            <input matInput 
-                    [matDatepicker]="picker" 
-                    placeholder="Edition de la date" 
-                    [ngModel]="dateDeRendu()" 
-                    (ngModelChange)="dateDeRendu.set($event)"
-                    name="date"
-            >
-            <mat-datepicker-toggle matSuffix 
-                                    [for]="picker"
-            >
-            </mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-        <button mat-raised-button 
-                color="primary"
-                [disabled]="!dateDeRendu() || !nomDevoir()"
-        >
-        Sauver
-        </button>
-    </form>
-    </div>
-}
+  <!-- Nom devoir -->
+  <div class="form-group">
+    <label>📘 Nom du devoir</label>
+    <input [(ngModel)]="assignment.nomDevoir" />
+  </div>
 
+  <!-- Matière -->
+  <div class="form-group">
+    <label>📚 Matière</label>
+    <select [(ngModel)]="assignment.matiere" (change)="onMatiereChange()">
+      <option *ngFor="let m of matieres" [value]="m.nom">
+        {{m.nom}}
+      </option>
+    </select>
+  </div>
+
+  <!-- Prof (auto) -->
+  <div class="form-group">
+    <label>👨‍🏫 Professeur</label>
+    <input [value]="assignment.professeur" disabled />
+  </div>
+
+  <!-- Note -->
+  <div class="form-group">
+    <label>📊 Note</label>
+    <input type="number" [(ngModel)]="assignment.note" />
+  </div>
+
+  <!-- Date -->
+  <div class="form-group">
+    <label>📅 Date de rendu</label>
+    <input type="date" [(ngModel)]="assignment.dateDeRendu" />
+  </div>
+
+  <!-- Rendu -->
+  <div class="form-group checkbox">
+    <label>
+      <input type="checkbox" [(ngModel)]="assignment.rendu" />
+      ✔ Rendu
+    </label>
+  </div>
+
+  <!-- Remarques -->
+  <div class="form-group">
+    <label>📝 Remarques</label>
+    <textarea [(ngModel)]="assignment.remarques"></textarea>
+  </div>
+
+  <!-- Bouton -->
+  <button (click)="onSave()">💾 Sauvegarder</button>
+
+</div>
