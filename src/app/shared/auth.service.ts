@@ -33,6 +33,16 @@ export class AuthService {
   }
 
   logout() {
+    // Call backend logout endpoint (best-effort) then clear local storage
+    this.http.post(`${APP_ENV.authApiUrl}/logout`, {}).subscribe({
+      next: () => {
+        // noop
+      },
+      error: () => {
+        // ignore network errors
+      }
+    });
+
     localStorage.removeItem('role');
     localStorage.removeItem('token');
   }

@@ -4,7 +4,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { provideNativeDateAdapter } from '@angular/material/core';
+import { provideNativeDateAdapter, MatNativeDateModule } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
 
 import { Assignment } from '../assignment.model';
 import { AssignmentsService } from '../../shared/assignments.service';
@@ -19,6 +20,7 @@ import { CommonModule } from '@angular/common';
     MatInputModule,
     MatFormFieldModule,
     MatDatepickerModule,
+    MatNativeDateModule,
     CommonModule,
     MatButtonModule
   ],
@@ -68,6 +70,12 @@ export class EditAssignment implements OnInit {
   }
 
   onSave() {
+    // validation front: note must be between 0 and 20
+    if (this.assignment.note != null && (this.assignment.note < 0 || this.assignment.note > 20)) {
+      alert('La note doit être comprise entre 0 et 20');
+      return;
+    }
+
     this.assignmentsService.updateAssignment(this.assignment)
       .subscribe({
         next: () => {

@@ -1,0 +1,25 @@
+<div class="home-wrap">
+  <mat-card class="hero">
+    <mat-card-header>
+      <div mat-card-avatar class="logo">📚</div>
+      <mat-card-title>Assignments Manager</mat-card-title>
+      <mat-card-subtitle>Gestion simple et rapide des devoirs</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <p>Bienvenue — créez, consultez et suivez les devoirs facilement.</p>
+    </mat-card-content>
+
+    <mat-card-actions class="home-actions">
+      <button mat-raised-button color="primary" (click)="goAdd()">
+        <mat-icon>add_circle</mat-icon>
+        &nbsp;Ajouter
+      </button>
+
+      <button mat-stroked-button color="accent" (click)="goAssignments()">
+        <mat-icon>list</mat-icon>
+        &nbsp;Voir tous les assignments
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

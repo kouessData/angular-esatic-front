@@ -34,13 +34,17 @@
   <!-- Note -->
   <div class="form-group">
     <label>📊 Note</label>
-    <input type="number" [(ngModel)]="assignment.note" />
+    <input type="number" min="0" max="20" [(ngModel)]="assignment.note" />
   </div>
 
   <!-- Date -->
   <div class="form-group">
     <label>📅 Date de rendu</label>
-    <input type="date" [(ngModel)]="assignment.dateDeRendu" />
+    <mat-form-field appearance="outline" class="full">
+      <input matInput [matDatepicker]="picker" [(ngModel)]="assignment.dateDeRendu" name="dateDeRendu">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
   </div>
 
   <!-- Rendu -->

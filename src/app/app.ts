@@ -47,6 +47,7 @@ export class App {
     this.router.navigate(['/login']);
   } else {
     this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }
 

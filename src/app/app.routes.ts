@@ -3,6 +3,7 @@ import { Assignments } from './assignments/assignments';
 import { AddAssignment } from './assignments/add-assignment/add-assignment';
 import { AssignmentDetail } from './assignments/assignment-detail/assignment-detail';
 import { EditAssignment } from './assignments/edit-assignment/edit-assignment';
+import { Home } from './home/home';
 
 import { authGuard } from './shared/auth-guard';
 
@@ -11,9 +12,10 @@ import { Login } from './login/login';
 export const routes: Routes = [
     
     { path: '', redirectTo: '/login', pathMatch: 'full' },
-    { path: 'home', component: Assignments, canActivate: [authGuard] },
+    { path: 'home', component: Home, canActivate: [authGuard] },
 
     { path: 'add', component: AddAssignment, canActivate: [authGuard]},
+    { path: 'assignments', component: Assignments, canActivate: [authGuard]},
     { path: 'assignments/:id', component: AssignmentDetail, canActivate: [authGuard]},
     
     { path: 'login', component: Login },

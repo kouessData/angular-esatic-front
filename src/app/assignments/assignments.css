@@ -52,6 +52,13 @@
   background: rgba(255, 255, 255, 0.04);
   color: var(--text-0);
   min-width: 170px;
+  color-scheme: dark;
+  /* 🔥 Force dropdown mode */
+}
+
+.filters select option {
+  background-color: var(--bg-1);
+  color: var(--text-0);
 }
 
 .filters input {

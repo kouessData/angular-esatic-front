@@ -1,8 +1,8 @@
 import { Component, computed, input, OnInit, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import {MatCardModule} from '@angular/material/card';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 
 import { Router, RouterLink } from '@angular/router';
@@ -29,10 +29,10 @@ export class AssignmentDetail implements OnInit {
   deleteAssignment = output<Assignment>();
 
   constructor(private assignmentsService: AssignmentsService,
-              private authService: AuthService,
-              private route: ActivatedRoute,
-              private router: Router
-  ) {}
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) { }
 
   ngOnInit() {
     console.log("AssignmentDetail ngOnInit called");
@@ -50,10 +50,10 @@ export class AssignmentDetail implements OnInit {
 
     // on va chercher dans le service l'assignment avec cet id
     this.assignmentsService.getAssignment(id)
-    .subscribe(assignment => {
-      //console.log("Assignment from service : ", assignment);
-      this.assignmentAffiche.set(assignment ?? null);
-    });
+      .subscribe(assignment => {
+        //console.log("Assignment from service : ", assignment);
+        this.assignmentAffiche.set(assignment ?? null);
+      });
   };
 
   onAssignmentRendu() {
@@ -62,8 +62,8 @@ export class AssignmentDetail implements OnInit {
 
     const assignment = this.assignmentAffiche();
 
-    if(assignment) {
-      assignment.rendu = ! assignment.rendu;
+    if (assignment) {
+      assignment.rendu = !assignment.rendu;
       this.assignmentsService.updateAssignment(assignment).subscribe(result => {
         console.log(result);
 
@@ -83,13 +83,13 @@ export class AssignmentDetail implements OnInit {
 
     if (assignment) {
       this.assignmentsService.deleteAssignment(assignment)
-      .subscribe(result => {
-        console.log(result);
+        .subscribe(result => {
+          console.log(result);
 
-        // on va naviguer programmatiquement vers la page d'accueil après la suppression, 
-        // pour éviter d'avoir une page de détail d'un devoir qui n'existe plus
-        this.router.navigate(['/']);
-      });
+          // on va naviguer programmatiquement vers la page d'accueil après la suppression, 
+          // pour éviter d'avoir une page de détail d'un devoir qui n'existe plus
+          this.router.navigate(['/assignments']);
+        });
     }
   }
 

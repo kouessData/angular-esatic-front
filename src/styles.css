@@ -15,9 +15,10 @@
   --t-fast: 200ms;
   --t-med: 260ms;
 
-  --bg-0: #070b12;
-  --bg-1: #0b1220;
-  --bg-2: #0e1930;
+  /* Slightly lightened dark theme backgrounds for improved readability */
+  --bg-0: #0b0f16; /* was #070b12 */
+  --bg-1: #0f1624; /* was #0b1220 */
+  --bg-2: #122038; /* was #0e1930 */
 
   --surface-0: rgba(255, 255, 255, 0.05);
   --surface-1: rgba(255, 255, 255, 0.07);
@@ -96,6 +97,12 @@ input,
 select,
 textarea {
   font: inherit;
+  color-scheme: dark; /* 🔥 Force dark appearance for system controls */
+}
+
+option {
+  background-color: var(--bg-1);
+  color: var(--text-0);
 }
 
 :where(button, [role="button"], a, input, select, textarea) {

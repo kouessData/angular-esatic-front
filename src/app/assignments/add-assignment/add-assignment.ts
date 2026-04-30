@@ -16,6 +16,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 //designer
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 
 @Component({
@@ -31,6 +33,8 @@ import { MatCardModule } from '@angular/material/card';
     MatButtonModule,
     MatIconModule,
     MatCardModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     MatSnackBarModule
   ],
   templateUrl: './add-assignment.html',
@@ -102,6 +106,15 @@ export class AddAssignment implements OnInit {
 
   onSubmit() {
     console.log("DATA ENVOYÉE :", this.assignment);
+
+    // validation front: note must be between 0 and 20
+    if (this.assignment.note != null && (this.assignment.note < 0 || this.assignment.note > 20)) {
+      this.snackBar.open("La note doit être entre 0 et 20", "Fermer", {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+      return;
+    }
 
     this.assignmentsService.addAssignment(this.assignment).subscribe({
       next: (res) => {
