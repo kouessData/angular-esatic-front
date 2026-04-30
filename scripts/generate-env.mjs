@@ -13,25 +13,22 @@ if (fs.existsSync(envPath)) {
   dotenv.config({ path: envPath });
 }
 
-const fromEnv = process.env.ASSIGNMENTS_API_URL || process.env.NG_APP_ASSIGNMENTS_API_URL;
-const defaultValue = 'http://localhost:8010/api/assignments';
-const assignmentsApiUrl = fromEnv || defaultValue;
+const defaultBase = 'https://angular-back-vw1a.onrender.com/api';
+
+const assignmentsApiUrl = process.env.ASSIGNMENTS_API_URL || `${defaultBase}/assignments`;
+const authApiUrl        = process.env.AUTH_API_URL        || `${defaultBase}/auth`;
+const matieresApiUrl    = process.env.MATIERES_API_URL    || `${defaultBase}/matieres`;
 
 const outputPath = path.join(projectRoot, 'src', 'app', 'shared', 'app-env.ts');
 const fileContent = `// Fichier généré automatiquement par scripts/generate-env.mjs
-// Source: variables d'environnement (Render/CI) ou .env (local). Ne pas éditer à la main.
+// Ne pas éditer à la main.
 
 export const APP_ENV = {
   assignmentsApiUrl: ${JSON.stringify(assignmentsApiUrl)},
+  authApiUrl: ${JSON.stringify(authApiUrl)},
+  matieresApiUrl: ${JSON.stringify(matieresApiUrl)},
 } as const;
 `;
 
 fs.writeFileSync(outputPath, fileContent, { encoding: 'utf8' });
 console.log(`[generate-env] Écrit: ${path.relative(projectRoot, outputPath)}`);
-
-if (!fromEnv && !fs.existsSync(envPath)) {
-  console.warn(
-    `[generate-env] Aucun .env et aucune variable ASSIGNMENTS_API_URL/NG_APP_ASSIGNMENTS_API_URL trouvée. ` +
-      `Valeur par défaut utilisée: ${defaultValue}`,
-  );
-}
