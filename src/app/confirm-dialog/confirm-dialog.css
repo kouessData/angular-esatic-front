@@ -1,0 +1,8 @@
+button {
+  border-radius: 999px;
+}
+
+:host ::ng-deep .mat-mdc-dialog-actions {
+  padding: 12px 18px 18px;
+  gap: 10px;
+}

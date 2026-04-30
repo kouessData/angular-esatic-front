@@ -1,12 +1,11 @@
-<!-- login.html corrigé -->
 <div class="login-container">
   <div class="login-card">
-    <h2>🔐 Connexion</h2>
+    <h2>Connexion</h2>
+    <p class="subtitle">Accédez à votre espace de suivi des assignments.</p>
 
-    <input [(ngModel)]="username" placeholder="Username">
+    <input [(ngModel)]="username" placeholder="Nom d'utilisateur">
     <input [(ngModel)]="password" type="password" placeholder="Mot de passe">
 
     <button (click)="onLogin()">Se connecter</button>
-    <!--              ↑ était login(), doit correspondre à la méthode dans login.ts -->
   </div>
 </div>

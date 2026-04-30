@@ -1,12 +1,25 @@
-mat-toolbar {
+.app-toolbar {
   position: sticky;
   top: 0;
   z-index: 10;
+  width: 100%;
+  margin: 0;
+  border-radius: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03)),
+    radial-gradient(1200px 300px at 20% 0%, rgba(124, 58, 237, 0.25), transparent 55%),
+    radial-gradient(900px 320px at 85% 0%, rgba(34, 211, 238, 0.12), transparent 60%);
+  border-bottom: 1px solid var(--border-0);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(14px);
 }
 
 .logo {
-  font-weight: bold;
-  font-size: 18px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.06rem;
+  letter-spacing: -0.02em;
+  color: var(--text-0);
 }
 
 .spacer {
@@ -14,5 +27,18 @@ mat-toolbar {
 }
 
 .content {
-  padding: 20px;
+  width: 100%;
+  padding: 24px clamp(14px, 3vw, 40px) 36px;
+  min-height: calc(100vh - 64px);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.03));
+  border-radius: 0 0 16px 16px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(14px);
+}
+
+@media (max-width: 768px) {
+  .content {
+    padding: 16px;
+    min-height: calc(100vh - 64px);
+  }
 }
