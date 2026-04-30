@@ -1,72 +1,75 @@
-# AssignmentApp
+# Assignment App
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.4.
+Projet de gestion de devoirs fait en Angular.
 
-projet continué par le groupe Kouassi N'guessan
-## Development server
+## En gros, ce que j'ai eu a faire
 
-To start a local development server, run:
+- Mettre en place une petite appli pour suivre des assignments (devoirs)
+- Faire un ecran de connexion pour que l'utilisateur puisse entrer
+- Afficher la liste des devoirs et ouvrir la fiche detail
+- Permettre d'ajouter, modifier et supprimer un devoir
+- Gerer des droits simples (par exemple certaines actions reservees a l'admin)
+- Relier le front a un backend avec une URL configurable
+
+## Stack technique
+
+- Angular 21
+- Angular Material
+- RxJS
+- Backend API externe (URL configuree via `.env`)
+
+## Prerequis
+
+- Node.js (version recente)
+- npm
+- Un backend disponible pour les endpoints d'authentification et assignments
+
+## Installation
+
+```bash
+npm install
+```
+
+## Configuration
+
+1. Copier le fichier d'exemple :
+
+```bash
+cp .env.example .env
+```
+
+2. Adapter au besoin la variable :
+
+```env
+ASSIGNMENTS_API_URL=http://localhost:8010/api/assignments
+```
+
+Le script `scripts/generate-env.mjs` genere automatiquement `src/app/shared/app-env.ts` a partir des variables d'environnement.
+
+## Lancer le projet en local
 
 ```bash
 npm run startdev
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Puis ouvrir [http://localhost:4200](http://localhost:4200).
 
-## Configuration (backend URI)
-
-This project does **not** commit `.env` to GitHub (secrets / local config).
-
-- Local dev: create `./.env` from `./.env.example` and set:
-	- `ASSIGNMENTS_API_URL=http://localhost:8010/api/assignments`
-- Render.com (deploy): set the same value as an **Environment Variable** in the Render dashboard.
-
-The build generates `src/app/shared/app-env.ts` from environment variables (Render/CI) or from `.env` (local).
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Commandes utiles
 
 ```bash
-ng generate component component-name
+npm run start      # lance ng serve
+npm run build      # build de production
+npm run test       # tests unitaires
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Structure rapide
 
-```bash
-ng generate --help
-```
+- `src/app/assignments/` : composants de liste, detail, ajout et edition
+- `src/app/login/` : ecran de connexion
+- `src/app/shared/assignments.service.ts` : appels API assignments
+- `src/app/shared/auth.service.ts` : login/logout et gestion du role
+- `src/app/app.routes.ts` : routes de l'application
 
-## Building
+## Deploiement front
 
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
-
-ajout de blkmth
+Le projet contient `server.js` (Express) pour servir le build Angular (`dist/assignment-app/browser`) sur un serveur Node.
