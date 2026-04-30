@@ -17,7 +17,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, MatButtonModule, MatIconModule, 
-    MatDividerModule, Assignments, RouterLink, MatSlideToggleModule,
+    MatDividerModule, RouterLink, MatSlideToggleModule,
     MatToolbarModule, MatDialogModule,CommonModule, MatSidenavModule],
   templateUrl: './app.html',
   styleUrl: './app.css'

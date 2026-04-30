@@ -28,7 +28,7 @@ export class AssignmentsService {
     // l'asynchronicité de l'appel HTTP. La norme en Angular, c'est d'utiliser
     // des Observables, avec la librairie RxJS.
     //return of(this.assignments);
-    return this.http.get<Assignment[]>(this.URI_BACKEND);
+    return this.http.get<Assignment[]>(this.URI_BACKEND,this.getHeaders());
   }
 
   // Version avec pagination : on envoie la page et le nombre d'éléments 
@@ -37,7 +37,8 @@ export class AssignmentsService {
   // paramètres de requête et retourner les données correspondantes.
   getAssignmentsPagine(page: number, limit: number, search: string = '') {
     return this.http.get<any>(
-      `${this.URI_BACKEND}?page=${page}&limit=${limit}&search=${search}`
+      `${this.URI_BACKEND}?page=${page}&limit=${limit}&search=${search}`,
+      this.getHeaders()
     );
   }
 
@@ -45,7 +46,7 @@ export class AssignmentsService {
   getAssignment(id: string): Observable<Assignment | undefined> {
     //const assignment = this.assignments.find(a => a.id === id);
     //return of(assignment);
-    return this.http.get<Assignment>(this.URI_BACKEND + '/' + id);
+    return this.http.get<Assignment>(this.URI_BACKEND + '/' + id,this.getHeaders());
   }
 
   addAssignment(assignment: Assignment): Observable<any> {
@@ -53,7 +54,7 @@ export class AssignmentsService {
 
     this.loggingService.log(assignment.nom, 'ajouté');
 
-    return this.http.post<any>(this.URI_BACKEND, assignment);
+    return this.http.post<any>(this.URI_BACKEND, assignment,this.getHeaders() );
   }
 
   updateAssignment(assignment: Assignment): Observable<any> {
@@ -79,7 +80,7 @@ export class AssignmentsService {
     this.loggingService.log(assignment.nom, 'supprimé');
 
     //return of('Assignment supprimé avec succès !');
-    return this.http.delete<any>(this.URI_BACKEND + '/' + assignment._id);
+    return this.http.delete<any>(this.URI_BACKEND + '/' + assignment._id,this.getHeaders());
   }
 
   getHeaders() {
@@ -93,7 +94,7 @@ export class AssignmentsService {
     
   }
   getMatieres() {
-    return this.http.get<any[]>('http://localhost:8010/api/matieres');
+    return this.http.get<any[]>(APP_ENV.matieresApiUrl);
   }
   
   peuplerBD() {

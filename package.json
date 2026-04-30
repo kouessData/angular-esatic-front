@@ -4,10 +4,10 @@
   "scripts": {
     "ng": "ng",
     "startdev": "node scripts/generate-env.mjs && ng serve",
-    "start": "node scripts/generate-env.mjs && node server.js",
-    "build": "node scripts/generate-env.mjs && ng build",
-    "watch": "node scripts/generate-env.mjs && ng build --watch --configuration development",
-    "test": "node scripts/generate-env.mjs && ng test",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": " ng build --watch --configuration development",
+    "test": " ng test",
     "postinstall": "node scripts/generate-env.mjs"
   },
   "prettier": {
