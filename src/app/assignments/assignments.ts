@@ -15,17 +15,21 @@ import { AuthService } from '../shared/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialog } from '../confirm-dialog/confirm-dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-assignments',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule, // 🔥 AJOUT
+    FormsModule,
     MatButtonModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSnackBarModule // 🔥 AJOUT
+    MatSnackBarModule,
+    MatIconModule,
+    MatTooltipModule
   ],
   templateUrl: './assignments.html',
   styleUrl: './assignments.css',
@@ -54,7 +58,6 @@ export class Assignments implements OnInit {
     'assignment-note',
     'assignment-dateDeRendu',
     'assignment-rendu',
-    'voir',
     'assignment-actions'
   ];
 
@@ -64,7 +67,7 @@ export class Assignments implements OnInit {
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     public auth: AuthService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getAssignments();

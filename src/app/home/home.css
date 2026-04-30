@@ -1,58 +1,48 @@
 .home-wrap {
   display: flex;
   justify-content: center;
-  padding: 48px 24px;
-  min-height: calc(100vh - 64px);
-  align-items: center;
-  background: linear-gradient(180deg, #0b1220 0%, #07101a 100%);
+  padding: 60px 24px;
 }
+
 .hero {
-  width: min(92%, 980px);
-  text-align: left;
-  padding: 28px 28px 24px 28px;
-  border-radius: 14px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
-  box-shadow: 0 10px 30px rgba(2,6,23,0.7), inset 0 1px 0 rgba(255,255,255,0.02);
-  color: #e6eef8;
+  width: min(92%, 800px);
+  padding: 40px;
 }
+
 .hero mat-card-header {
-  align-items: center;
+  margin-bottom: 24px;
 }
+
 .hero .logo {
   width: 64px;
   height: 64px;
-  border-radius: 12px;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 28px;
-  background: linear-gradient(135deg,#2b394a,#1a2430);
-  color: #fff;
+  font-size: 32px;
+  background: var(--bg-2);
+  margin-right: 16px;
 }
+
 .hero mat-card-title {
-  font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 4px;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
 }
+
 .hero mat-card-subtitle {
-  font-size: 14px;
-  color: #9fb0c9;
+  font-size: 1.1rem;
+  color: var(--text-2);
 }
+
 .hero mat-card-content p {
-  margin-top: 10px;
-  color: #bfcfe0;
-  font-size: 15px;
+  font-size: 1.1rem;
+  color: var(--text-1);
 }
+
 .home-actions {
   display: flex;
-  gap: 14px;
-  margin-top: 18px;
-}
-
-.hero button[mat-raised-button] {
-  padding: 10px 18px;
-}
-
-.hero button[mat-stroked-button] {
-  padding: 10px 18px;
+  gap: 16px;
+  margin-top: 32px;
 }

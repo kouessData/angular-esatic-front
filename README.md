@@ -2,7 +2,7 @@
 
 Projet de gestion de devoirs fait en Angular.
 
-## En gros, ce que j'ai eu a faire
+## ce qui a été mis en place 
 
 - Mettre en place une petite appli pour suivre des assignments (devoirs)
 - Faire un ecran de connexion pour que l'utilisateur puisse entrer

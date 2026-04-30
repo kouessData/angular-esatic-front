@@ -3,42 +3,48 @@
   top: 0;
   z-index: 10;
   width: 100%;
-  margin: 0;
-  border-radius: 0;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03)),
-    radial-gradient(1200px 300px at 20% 0%, rgba(124, 58, 237, 0.25), transparent 55%),
-    radial-gradient(900px 320px at 85% 0%, rgba(34, 211, 238, 0.12), transparent 60%);
-  border-bottom: 1px solid var(--border-0);
-  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(14px);
+  padding: 0 24px;
 }
 
 .logo {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.06rem;
-  letter-spacing: -0.02em;
-  color: var(--text-0);
+  font-weight: 800;
+  font-size: 1.4rem;
+  letter-spacing: -0.04em;
+  background: linear-gradient(135deg, var(--accent), #3b82f6);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-right: 24px;
 }
 
 .spacer {
   flex: 1;
 }
 
+/* Navbar Buttons Styles */
+.app-toolbar button[mat-button] {
+  margin: 0 4px;
+  font-weight: 700;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  color: var(--text-1);
+}
+
+.app-toolbar button[mat-button]:hover {
+  background: var(--bg-2);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
 .content {
-  width: 100%;
-  padding: 24px clamp(14px, 3vw, 40px) 36px;
-  min-height: calc(100vh - 64px);
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.03));
-  border-radius: 0 0 16px 16px;
-  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(14px);
+  padding: 32px 24px;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 @media (max-width: 768px) {
   .content {
     padding: 16px;
-    min-height: calc(100vh - 64px);
   }
 }
